@@ -4,6 +4,17 @@
 
 This small tool, allows you to split a .docx file into multiple files based on headings. Useful for separating a big word file with chapters, into smaller files.
 
+## Fork specific fix 
+
+We found that some headings were not handled properly by the original repository. We propose a fixed version of `main.py` script, as well as updated requirements and usage.
+
+* To install the required dependencies, `pip install -r updated_requirements.txt`.
+* To run the main script, `python3 main.py -f your/file/name/here.docx`.
+
+This will output a zip file with multiple docx files according to headers in the document. 
+
+
+
 ## Motivation
 
 Dealing with docx files is a bit time consuming, and splitting them is pretty annoying. I looked for the libraries online such as python-docx (included in this tool), but they are far from to be ready for practical usage for automatic splitting .docx files.
