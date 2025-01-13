@@ -4,6 +4,7 @@ import docx2txt
 
 import click
 import docx
+import string
 from docx import Document
 
 from pathlib import Path
@@ -35,6 +36,9 @@ def docsplitter(file=None, level=1, noname=False):
         for paragraph in document.paragraphs:
             if(is_heading(paragraph, str(level)) or is_Title(paragraph)):
                 title = getParagraphTitle(paragraph)
+
+                title = "".join([c for c in title if c in string.printable])
+                title = title.replace("/", "_")
                 newName = str('{:0>2}'.format(i)) + ' - ' + newBaseName + ' ' + title + '.docx'
                 if(noname):
                     newName = str('{:0>2}'.format(i)) + ' - ' + title + '.docx'
@@ -45,12 +49,14 @@ def docsplitter(file=None, level=1, noname=False):
                 currentName = newName
                 currentDocument = newDocument
                 i+=1
-            cloneParagraph(newDocument, paragraph)
+            if currentDocument == '':
+                continue
+            cloneParagraph(currentDocument, paragraph)
             if 'graphic' in paragraph._p.xml:
                 # Get the rId of the image
                 for rId in rels:
                     if rId in paragraph._p.xml:
-                        newDocument.add_picture(os.path.join(tmpdirname, rels[rId]))
+                        currentDocument.add_picture(os.path.join(tmpdirname, rels[rId]))
     zipObj.close()
 
 def is_heading(paragraph, level):
